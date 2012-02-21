@@ -18,6 +18,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
 		<spring.version>3.1.0.RELEASE</spring.version>
+		<webframe.version>1.1.2</webframe.version>
 	</properties>
 	
 	<dependencyManagement>
@@ -91,6 +92,21 @@
 	</dependencyManagement>
 
 	<dependencies>
+		<dependency>
+			<groupId>org.webframe</groupId>
+			<artifactId>wf-support</artifactId>
+			<version>${webframe.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.webframe</groupId>
+			<artifactId>wf-core</artifactId>
+			<version>${webframe.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.webframe</groupId>
+			<artifactId>wf-test</artifactId>
+			<version>${webframe.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>commons-logging</groupId>
 			<artifactId>commons-logging</artifactId>
