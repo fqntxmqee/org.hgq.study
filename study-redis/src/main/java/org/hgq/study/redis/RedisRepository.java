@@ -13,6 +13,7 @@ import java.util.regex.Pattern;
 import org.hgq.study.redis.model.Post;
 import org.hgq.study.redis.model.Range;
 import org.hgq.study.redis.util.KeyUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.BoundHashOperations;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
@@ -31,22 +32,23 @@ public class RedisRepository {
 
 	private static final Pattern							MENTION_REGEX	= Pattern.compile("@[\\w]+");
 
-	private final StringRedisTemplate					template;
+	private StringRedisTemplate							template;
 
-	private final ValueOperations<String, String>	valueOps;
+	private ValueOperations<String, String>			valueOps;
 
-	private final RedisAtomicLong							userIdCounter;
+	private RedisAtomicLong									userIdCounter;
 
 	// global users
 	private RedisList<String>								users;
 
 	// global timeline
-	private final RedisList<String>						timeline;
+	private RedisList<String>								timeline;
 
 	private final HashMapper<Post, String, String>	postMapper		= new DecoratingStringHashMapper<Post>(new JacksonHashMapper<Post>(Post.class));
 
-	public RedisRepository(StringRedisTemplate template) {
-		this.template = template;
+	@Autowired
+	public void setTemplate(StringRedisTemplate stringRedisTemplate) {
+		template = stringRedisTemplate;
 		valueOps = template.opsForValue();
 		users = new DefaultRedisList<String>(KeyUtils.users(), template);
 		timeline = new DefaultRedisList<String>(KeyUtils.timeline(), template);

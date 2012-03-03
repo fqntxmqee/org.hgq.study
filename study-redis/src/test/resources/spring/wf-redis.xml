@@ -6,21 +6,24 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
       http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd
       http://www.springframework.org/schema/redis http://www.springframework.org/schema/redis/spring-redis.xsd">
+	
+	<bean id="redisRepository" class="org.hgq.study.redis.RedisRepository" />
+	
 	<!-- turn on declarative caching -->
 	<cache:annotation-driven />
 
 	<!-- Jedis ConnectionFactory -->
-	<bean id="jedisConnectionFactory" p:host-name="server" p:port="6379" p:use-pool="true"
+	<bean id="jedisConnectionFactory" p:host-name="192.168.0.3" p:port="6379" p:use-pool="true"
 		class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory" />
 	
-	<!-- Jredis ConnectionFactory -->
+	<!-- Jredis ConnectionFactory 
 	<bean id="jredisConnectionFactory" p:host-name="server" p:port="6379"
 		class="org.springframework.data.redis.connection.jredis.JredisConnectionFactory" />
-
-	<!-- Rjc ConnectionFactory -->
+	-->
+	<!-- Rjc ConnectionFactory 
 	<bean id="rjcConnectionFactory" p:host-name="server" p:port="6379"
 		class="org.springframework.data.redis.connection.rjc.RjcConnectionFactory" />
-
+	-->
 
 	<!-- redis template definition -->
 	<bean id="redisTemplate" p:connection-factory-ref="jedisConnectionFactory"
@@ -29,11 +32,12 @@
 	<bean id="stringRedisTemplate" p:connection-factory-ref="jedisConnectionFactory"
 		class="org.springframework.data.redis.core.StringRedisTemplate" />
 
+	<!--
 	<bean id="queue" class="org.springframework.data.redis.support.collections.DefaultRedisList">
 		<constructor-arg ref="redisTemplate" />
 		<constructor-arg value="queue-key" />
 	</bean>
-
+	-->
 	<!-- the default ConnectionFactory 
 	<redis:listener-container>
 		<redis:listener ref="listener" method="handleMessage" topic="chatroom" />
