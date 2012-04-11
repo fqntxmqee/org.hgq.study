@@ -1,11 +1,11 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
 
-  <groupId>org.hgq.study</groupId>
-  <artifactId>study</artifactId>
-  <version>1.0.0-SNAPSHOT</version>
-  <packaging>pom</packaging>
+	<groupId>org.hgq.study</groupId>
+	<artifactId>study</artifactId>
+	<version>1.0.0-SNAPSHOT</version>
+	<packaging>pom</packaging>
 
 	<name>study</name>
 	<description>Java Study</description>
@@ -32,11 +32,12 @@
 			<email>guoqing.huang@foxmail.com</email>
 		</developer>
 	</developers>
-	
+
 	<modules>
 		<module>study-paren</module>
 		<module>study-redis</module>
 		<module>study-perf4j</module>
+		<module>study-activemq</module>
 	</modules>
 
 	<properties>
@@ -87,7 +88,7 @@
 					</archive>
 				</configuration>
 			</plugin>
-			
+
 			<!-- javadoc打包插件 -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -230,7 +231,7 @@
 					</execution>
 				</executions>
 			</plugin>
-			
+
 			<!-- 生成站点 -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
