@@ -1,5 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>org.hgq.study</groupId>
@@ -38,7 +38,9 @@
 		<module>study-redis</module>
 		<module>study-perf4j</module>
 		<module>study-activemq</module>
-	</modules>
+		<module>study-apache-commons</module>
+    <module>study-apache-tiles</module>
+  </modules>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -162,7 +164,7 @@
 				<version>${plugin.surefire.version}</version>
 			</plugin>
 
-			<!-- 覆盖率测试插件 -->
+			<!-- 覆盖率测试插�?-->
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>cobertura-maven-plugin</artifactId>

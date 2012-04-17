@@ -18,11 +18,42 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
 		<spring.version>3.1.0.RELEASE</spring.version>
-		<webframe.version>1.1.4</webframe.version>
+		<webframe.version>1.1.7</webframe.version>
 	</properties>
 	
 	<dependencyManagement>
 		<dependencies>
+			<dependency>
+				<groupId>org.webframe</groupId>
+				<artifactId>wf-support</artifactId>
+				<version>${webframe.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.webframe</groupId>
+				<artifactId>wf-core</artifactId>
+				<version>${webframe.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.webframe</groupId>
+				<artifactId>wf-web</artifactId>
+				<version>${webframe.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.webframe</groupId>
+				<artifactId>wf-web-page</artifactId>
+				<version>${webframe.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.webframe</groupId>
+				<artifactId>wf-web-springmvc</artifactId>
+				<version>${webframe.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.webframe</groupId>
+				<artifactId>wf-test</artifactId>
+				<version>${webframe.version}</version>
+			</dependency>
+			
 			<dependency>
 				<groupId>commons-beanutils</groupId>
 				<artifactId>commons-beanutils</artifactId>
@@ -95,17 +126,14 @@
 		<dependency>
 			<groupId>org.webframe</groupId>
 			<artifactId>wf-support</artifactId>
-			<version>${webframe.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.webframe</groupId>
 			<artifactId>wf-core</artifactId>
-			<version>${webframe.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.webframe</groupId>
 			<artifactId>wf-test</artifactId>
-			<version>${webframe.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-logging</groupId>

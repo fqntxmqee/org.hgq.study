@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:amq="http://activemq.apache.org/schema/core"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+							http://activemq.apache.org/schema/core http://activemq.apache.org/schema/core/activemq-core.xsd">
+							
+	<!-- 使用spring的listenerContainer 消息用持久化保存， -->
+	<!-- Embedded ActiveMQ Broker -->
+	<amq:broker useJmx="false" persistent="true">
+		<amq:persistenceAdapter>
+			<amq:amqPersistenceAdapter directory="D:/amq" />
+			<!-- 使用数据库持久化 -->
+			<!--<amq:jdbcPersistenceAdapter dataSource="#mysql-ds" /> -->
+		</amq:persistenceAdapter>
+		<amq:transportConnectors>
+			<amq:transportConnector uri="tcp://localhost:61616" />
+		</amq:transportConnectors>
+	</amq:broker>
+	
+	<!--ActiveMQ connectionFactory -->
+	<amq:connectionFactory id="jmsConnectionFactory" brokerURL="vm://localhost" /> 
+	
+	<!-- ActiveMQ destinations -->
+	<!-- TOPIC：发布订阅消息 无状态，不保证每条消息被消费 只有监听该TOPIC地址才能收到消息并消费，否则该消息将会丢失 一对多的发布接受策略，可以同时消费多个消息 -->
+	<amq:topic id="TOPIC" name="TOPIC" physicalName="JMS-TOPIC" />
+	
+	<!-- QUEUE： 点对点 消息数据被持久化，每条消息都能被消费 没有监听QUEUE地址也能被消费，数据不会丢失 一对一的发布接受策略，保证数据完整 -->
+	<amq:queue id="QUEUE" name="QUEUE" physicalName="JMS-QUEUE" />
+	
+	<!-- ConnectionFactory -->
+	<bean id="singleConnectionFactory" class="org.springframework.jms.connection.SingleConnectionFactory"
+		destroy-method="destroy">
+		<property name="targetConnectionFactory" ref="jmsConnectionFactory" />
+	</bean>
+	
+	<!-- 添加事务 -->
+	<bean id="jmsTransactionManager" class="org.springframework.jms.connection.JmsTransactionManager">
+		<property name="connectionFactory" ref="singleConnectionFactory" />
+	</bean>
+	
+	<!-- Spring JmsTemplate config -->
+	<bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate">
+		<!-- lets wrap in a pool to avoid creating a connection per send -->
+		<property name="connectionFactory" ref="singleConnectionFactory" />
+		<!-- custom MessageConverter -->
+		<property name="messageConverter" ref="defaultMessageConverter" />
+		<property name="sessionTransacted" value="true" />
+	</bean>
+	
+	<!-- converter -->
+	<bean id="defaultMessageConverter" class="org.hgq.study.activemq.core.DefaultMessageConverter" /> 
+	<!-- 生产消息配置 -->
+	<!-- POJO which send Message uses Spring JmsTemplate -->
+	<bean id="topicMessageProducer" class="org.hgq.study.activemq.core.TopicMessageProducer">
+		<property name="template" ref="jmsTemplate" />
+		<property name="destination" ref="TOPIC" />
+	</bean>
+	<bean id="queueMessageProducer" class="org.hgq.study.activemq.core.QueueMessageProducer">
+		<property name="template" ref="jmsTemplate" />
+		<property name="destination" ref="QUEUE" />
+	</bean>
+	<!-- 消费消息 配置 -->
+	<!-- Message Driven POJO (MDP) -->
+	<!-- consumer1 for topic -->
+	<bean id="topicConsumer" class="org.hgq.study.activemq.core.TopicConsumer" />
+	<!-- consumer for queue -->
+	<bean id="queueConsumer" class="org.hgq.study.activemq.core.QueueConsumer" />
+	<!-- Message Listener for -->
+	<bean id="topicListener" class="org.springframework.jms.listener.adapter.MessageListenerAdapter">
+		<constructor-arg ref="topicConsumer" />
+		<!-- 指定消费消息的方法 -->
+		<property name="defaultListenerMethod" value="receive" />
+		<!-- custom MessageConverter define -->
+		<property name="messageConverter" ref="defaultMessageConverter" />
+	</bean>
+	<bean id="queueListener" class="org.springframework.jms.listener.adapter.MessageListenerAdapter">
+		<constructor-arg ref="queueConsumer" />
+		<!-- 指定消费消息的方法 -->
+		<property name="defaultListenerMethod" value="receive" />
+		<!-- custom MessageConverter define -->
+		<property name="messageConverter" ref="defaultMessageConverter" />
+	</bean>
+	
+	<!-- listener container，MDP无需实现接口 -->
+	<bean id="topicListenerContainer" class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+		<property name="connectionFactory" ref="jmsConnectionFactory" />
+		<property name="destination" ref="TOPIC" />
+		<property name="messageListener" ref="topicListener" />
+	</bean>
+	<bean id="queueListenerContainer" class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+		<property name="connectionFactory" ref="jmsConnectionFactory" />
+		<property name="destination" ref="QUEUE" />
+		<property name="messageListener" ref="queueListener" />
+		<property name="transactionManager" ref="jmsTransactionManager" />
+		<property name="sessionTransacted" value="true" />
+		<property name="concurrentConsumers" value="5" />
+	</bean>
+	
+</beans>
